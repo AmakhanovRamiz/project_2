@@ -25,7 +25,7 @@ SECRET_KEY = 'rrfjtr!+br_+5@ke9epvc%ikl_z(vmnq$mktaca3&8s-y+5gwm'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -39,7 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'mptt',
+    'corsheaders',
     'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
 
     'backend.notice_board',
     'backend.gallery',
@@ -49,6 +52,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -133,3 +137,33 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+REST_FRAMEWORK = {
+
+    'DEFAULT_PERMISSION_CLASSES': (
+
+        'rest_framework.permissions.IsAdminUser',
+
+        'rest_framework.permissions.AllowAny',
+
+    ),
+
+    'PAGE_SIZE': 10,
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+
+        'rest_framework.authentication.TokenAuthentication',
+
+        'rest_framework.authentication.BasicAuthentication',
+
+    ),
+
+    'DEFAULT_PAGINATION_CLASS':
+
+        'rest_framework_json_api.pagination.PageNumberPagination',
+
+}
+
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend' # Чтобы email крутился внутри проекта и не убегал ни на какие сервисы
